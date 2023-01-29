@@ -1,6 +1,6 @@
 {
-  "name": "use-virtual-scroll-by-milestones",
-  "version": "1.0.0",
+  "name": "virtual-list-by-milestones",
+  "version": "1.0.1",
   "description": "A React component allow rendering a large amount of items",
   "main": "dist/index.js",
   "repository": {
