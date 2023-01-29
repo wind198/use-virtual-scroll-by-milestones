@@ -34,3 +34,6 @@ Let look at the picture below
 + renderItem: A function that receive an item of data array and return the rendered item
 + itemElementType: The optional property, indicate the element type of the milestone component
 + intersectionOptions: Optional property, you can set the root element and the root margin. Root margin should > 300px, larger value will make more item being rendered.
+
+## Notes
++ Even though allow rendering a large number of items, when the list first rendered, it must render all items to be able to identify the correct size of avatar element to fake the items. So you should render initally a part of all items, then add more as user scroll down, the virtual list will handle the added items with ease
