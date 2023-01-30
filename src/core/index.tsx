@@ -275,13 +275,11 @@ const Milestone = (props: IMilestoneProps) => {
     ]
   );
 
-  return (
-    <div
-      ref={callbackRef}
-      style={{
-        margin: "0px",
-      }}
-      className="milestone"
-    ></div>
-  );
+  return createElement(elementType, {
+    ref: callbackRef,
+    style: {
+      margin: "0px",
+      className: "milestone",
+    },
+  });
 };
