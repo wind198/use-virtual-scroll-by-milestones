@@ -1,6 +1,6 @@
 {
   "name": "virtual-list-by-milestones",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "A React component allow rendering a large amount of items",
   "main": "dist/index.js",
   "repository": {
@@ -11,6 +11,7 @@
     "start": "webpack serve --port 3001",
     "build": "NODE_ENV=production webpack",
     "build-package": "tsc --project tsconfig.package.json",
+    "build-package-watch": "tsc --project tsconfig.package.json -w",
     "lint": "eslint --ext js,ts,tsx,stories src"
   },
   "keywords": [
