@@ -279,7 +279,7 @@ const Milestone = (props: IMilestoneProps) => {
     ref: callbackRef,
     style: {
       margin: "0px",
-      className: "milestone",
     },
+    className: "milestone",
   });
 };
