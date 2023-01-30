@@ -239,14 +239,13 @@ const Milestone = (props: IMilestoneProps) => {
           direction === "column"
             ? boundingRect.top + window.scrollY
             : boundingRect.left + window.scrollX;
-        console.log({ position, milestoneId });
 
         return position;
       }
 
       return direction === "column" ? node.offsetTop : node.offsetLeft;
     },
-    [intersectionOptions?.root, direction, milestoneId]
+    [intersectionOptions?.root, direction]
   );
 
   const {
