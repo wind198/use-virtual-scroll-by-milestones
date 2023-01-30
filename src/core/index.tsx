@@ -3,6 +3,7 @@ import {
   PropsWithChildren,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useRef,
 } from "react";
@@ -79,7 +80,7 @@ function Interval<T>(
     children,
     start,
     end,
-    itemElementType = "li",
+    itemElementType = "div",
     direction,
   } = props;
 
@@ -155,11 +156,14 @@ function Interval<T>(
           intersectionOptions: computedIntersectionOptions,
         }}
       />
-      {shouldRenderRealList || !avatarH
+      {shouldRenderRealList || avatarH < 1
         ? children
         : createElement(itemElementType, {
             style: {
-              ...(direction === "column" && { minHeight: `${avatarH}px` }),
+              ...(direction === "column" && {
+                minHeight: `${avatarH}px`,
+                lineHeight: `${avatarH}px`,
+              }),
               ...(direction === "row" && { minWidth: `${avatarH}px` }),
             },
             className: "avatar",
@@ -194,6 +198,9 @@ const Milestone = (props: IMilestoneProps) => {
   } = props;
 
   const milestoneObserverRef = useRef<IntersectionObserver>();
+
+  const milestoneRef = useRef<HTMLElement>();
+  const mileStoneCallbackRunFirstTime = useRef(false);
 
   const getCurrentScrollContainerPos: () => IVirtualListContext["srollContainerPosition"] =
     useCallback(() => {
@@ -232,32 +239,48 @@ const Milestone = (props: IMilestoneProps) => {
           direction === "column"
             ? boundingRect.top + window.scrollY
             : boundingRect.left + window.scrollX;
+        console.log({ position, milestoneId });
+
         return position;
       }
 
       return direction === "column" ? node.offsetTop : node.offsetLeft;
     },
-    [intersectionOptions?.root, direction]
+    [intersectionOptions?.root, direction, milestoneId]
   );
 
-  const { setMileStonePosition, setScrollContainerPosition } =
-    useContext(VirtualListContext);
+  const {
+    updateMileStonePositionCount,
+    setUpdateMileStonePositionCount,
+    setMileStonePosition,
+    setScrollContainerPosition,
+  } = useContext(VirtualListContext);
 
   const callbackRef = useCallback(
     (node: HTMLElement | null) => {
       if (!node) return;
+      milestoneRef.current = node as HTMLDivElement;
       milestoneObserverRef.current?.disconnect();
       const observer = new IntersectionObserver(
         (entries: IntersectionObserverEntry[]) => {
           const target = entries[0].target as HTMLElement;
-          // const inview = entries[0].isIntersecting;
+          const inview = entries[0].isIntersecting;
           if (!target) return;
 
-          setMileStonePosition(
-            milestoneId,
-            getNodePosRelativeToScrollContainer(target)
-          );
-          setScrollContainerPosition(getCurrentScrollContainerPos());
+          if (inview) {
+            setScrollContainerPosition(getCurrentScrollContainerPos());
+          }
+          if (!mileStoneCallbackRunFirstTime.current) {
+            setMileStonePosition(
+              milestoneId,
+              getNodePosRelativeToScrollContainer(target)
+            );
+            mileStoneCallbackRunFirstTime.current = true;
+            return;
+          }
+          if (inview) {
+            setUpdateMileStonePositionCount((u) => u + 1);
+          }
         },
         intersectionOptions
       );
@@ -272,8 +295,17 @@ const Milestone = (props: IMilestoneProps) => {
       setScrollContainerPosition,
       getCurrentScrollContainerPos,
       getNodePosRelativeToScrollContainer,
+      setUpdateMileStonePositionCount,
     ]
   );
+
+  useEffect(() => {
+    if (milestoneRef.current)
+      setMileStonePosition(
+        milestoneId,
+        getNodePosRelativeToScrollContainer(milestoneRef.current)
+      );
+  }, [updateMileStonePositionCount]);
 
   return createElement(elementType, {
     ref: callbackRef,

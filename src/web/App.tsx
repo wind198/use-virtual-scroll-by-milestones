@@ -164,7 +164,6 @@ const ListExample = (props: IListExampleProps) => {
           <VirtualList
             direction={direciton}
             renderItem={renderFruilt}
-            itemElementType="li"
             itemCountBetweenTwoMilestones={5}
             data={dataList}
             intersectionOptions={{

@@ -18,6 +18,7 @@ Let look at the picture below
 
 ## Examples
 ```javascript
+import VirtualList from "virtual-list-by-milestones";
 <VirtualList
     direction="column"
     renderItem={renderItem}
@@ -32,7 +33,7 @@ Let look at the picture below
 + direction: The optional property, indicate direction of the list
 + data: An array of item data
 + renderItem: A function that receive an item of data array and return the rendered item
-+ itemElementType: The optional property, indicate the element type of the milestone component
++ itemElementType: The optional property, indicate the element type of the milestone and avatar component, default to div element
 + intersectionOptions: Optional property, you can set the root element and the root margin. Root margin should > 300px, larger value will make more item being rendered.
 
 ## Notes

@@ -1,4 +1,11 @@
-import { createContext, PropsWithChildren, useCallback, useState } from "react";
+import {
+  createContext,
+  Dispatch,
+  PropsWithChildren,
+  SetStateAction,
+  useCallback,
+  useState,
+} from "react";
 
 export type IVirtualListContext = {
   mileStonesPositionMap: Record<string, number>;
@@ -8,6 +15,8 @@ export type IVirtualListContext = {
     end: number;
   };
   setScrollContainerPosition: (payload: { start: number; end: number }) => void;
+  updateMileStonePositionCount: number;
+  setUpdateMileStonePositionCount: Dispatch<SetStateAction<number>>;
 };
 
 export const VirtualListContext = createContext<IVirtualListContext>({
@@ -18,9 +27,14 @@ export const VirtualListContext = createContext<IVirtualListContext>({
   },
   setMileStonePosition() {},
   setScrollContainerPosition() {},
+  updateMileStonePositionCount: 0,
+  setUpdateMileStonePositionCount() {},
 });
 
 const VirtualListContextProvider = (props: PropsWithChildren<{}>) => {
+  const [updateMileStonePositionCount, setUpdateMileStonePositionCount] =
+    useState(0);
+
   const [mileStonesPositionMap, setMileStonesPositionMap] = useState<
     IVirtualListContext["mileStonesPositionMap"]
   >({});
@@ -46,6 +60,8 @@ const VirtualListContextProvider = (props: PropsWithChildren<{}>) => {
         setMileStonePosition,
         setScrollContainerPosition: updateScrollContainerPosition,
         srollContainerPosition: windowPosition,
+        updateMileStonePositionCount,
+        setUpdateMileStonePositionCount,
       }}
     >
       {props.children}
