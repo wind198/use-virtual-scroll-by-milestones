@@ -163,6 +163,7 @@ function Interval<T>(
               ...(direction === "column" && {
                 minHeight: `${avatarH}px`,
                 lineHeight: `${avatarH}px`,
+                height: `${avatarH}px`,
               }),
               ...(direction === "row" && { minWidth: `${avatarH}px` }),
             },
